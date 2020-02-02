@@ -3,19 +3,27 @@ package com.example.barteringandtrading.Model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 @Getter
 @Setter
+@Entity
 @Table(name="user")
-public class User {
+class User {
     @Id
-    @GeneratedValue()
-    private int id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "email")
     private String email;
-    private int phone;
+
+    @Column(name = "phone")
+    private long phone;
+
+    @Column
     private boolean active;
 
 }
