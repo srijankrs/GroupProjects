@@ -14,13 +14,13 @@ class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @Column(name = "name")
+    @Column
     private String name;
 
-    @Column(name = "email")
+    @Column
     private String email;
 
-    @Column(name = "phone")
+    @Column
     private long phone;
 
     @Column
