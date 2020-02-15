@@ -1,5 +1,6 @@
 package com.example.barteringandtrading.Controller;
 
+import com.example.barteringandtrading.Error.UserNotFoundException;
 import com.example.barteringandtrading.Model.UserItem;
 import com.example.barteringandtrading.Services.UserItemsService;
 import com.example.barteringandtrading.Services.UserItemsServiceImpl;
@@ -28,6 +29,7 @@ public class ItemController {
         list.add("test 2");
         list.add(itemId);
 
+        //throw new UserNotFoundException(itemId);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 

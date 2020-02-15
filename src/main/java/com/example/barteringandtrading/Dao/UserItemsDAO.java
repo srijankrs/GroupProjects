@@ -9,4 +9,6 @@ public interface UserItemsDAO {
     List<String> searchUserItems();
 
     String addItems(UserItem userItem) throws IOException;
+
+    long generateNewId();
 }

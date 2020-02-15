@@ -1,22 +1,20 @@
 package com.example.barteringandtrading.Dao;
 
-import com.example.barteringandtrading.Model.Token;
-import com.example.barteringandtrading.Model.User;
+import com.example.barteringandtrading.Error.UserItemNotInsertedException;
+import com.example.barteringandtrading.Error.UserNotFoundException;
 import com.example.barteringandtrading.Model.UserItem;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
@@ -30,22 +28,36 @@ public class UserItemsDAOImpl implements UserItemsDAO{
     @Override
     public List<String> searchUserItems() {
 
+        //throw new UserNotFoundException(123);
+
         return new ArrayList<>();
     }
 
     @Override
-    public String addItems(UserItem userItem) throws IOException {
+    public String addItems(@NonNull UserItem userItem) {
 
-        IndexResponse response = client.prepareIndex("users", "employee",String.valueOf(userItem.getId()))
-                .setSource(jsonBuilder()
-                        .startObject()
-                        .field("itemFor", userItem.getItemFor())
-                        .field("itemValue", userItem.getItemValue())
-                        .endObject()
-                )
-                .get();
-       log.info("response id:"+response.getId());
+        IndexResponse response ;
+
+        try{
+            response = client.prepareIndex("bat","useritems",String.valueOf(generateNewId()))
+                    .setSource(jsonBuilder()
+                            .startObject()
+                            .field("item_for", userItem.getItemFor())
+                            .field("items_required",userItem.getItemsRequired())
+                            .endObject()
+                    )
+                    .get();
+            log.info("response id:"+response.getId());
+        }
+        catch (Exception e){
+            log.error("Exception occurred while adding user items to elastic search"+ Arrays.toString(e.getStackTrace()));
+            throw new UserItemNotInsertedException(userItem);
+        }
+
         return response.getResult().toString();
+    }
 
+    public long generateNewId(){
+        return new Random().nextLong();
     }
 }

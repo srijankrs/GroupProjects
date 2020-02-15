@@ -10,4 +10,5 @@ public interface UserItemsService {
     void searchItem(long userId);
 
     String addItem(UserItem userItem) throws IOException;
+
 }

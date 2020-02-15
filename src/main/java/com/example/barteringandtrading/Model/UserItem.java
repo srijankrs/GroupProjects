@@ -33,4 +33,5 @@ public class UserItem {
 
     @Column
     private boolean deleted;
+
 }
